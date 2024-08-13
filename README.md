@@ -2,15 +2,16 @@
 MergeXcel is a powerful tool designed to seamlessly combine multiple Excel files into a single, unified file. Whether you're consolidating data from various sources or integrating reports, Excel Merger simplifies the process and ensures that your data is efficiently combined and ready for analysis.
 
 ## Features
-#### Combine Multiple Files: 
-Merge multiple Excel files into one with ease.
-#### Support for Multiple Sheets: 
-Handle files with multiple sheets and combine them accordingly.
-#### Custom Output Name: 
-Specify the name of the resulting merged file.
-#### Intuitive Interface: 
-User-friendly interface to upload files and set parameters.
-#### Data Integrity: Ensure no data is lost or duplicated during the merge process.
+### Combine Multiple Files: 
+-Merge multiple Excel files into one with ease.
+### Support for Multiple Sheets: 
+-Handle files with multiple sheets and combine them accordingly.
+### Custom Output Name: 
+-Specify the name of the resulting merged file.
+### Intuitive Interface: 
+-User-friendly interface to upload files and set parameters.
+### Data Integrity: 
+-Ensure no data is lost or duplicated during the merge process.
 
 ## Installation
 
