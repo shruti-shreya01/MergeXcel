@@ -1,7 +1,7 @@
 import pandas as pd
 import streamlit as st
 import io
-
+pip install openpyxl
 def merge_files(files):
     """Merge all uploaded Excel files into a single DataFrame."""
     all_sheets = {}
