@@ -76,7 +76,7 @@
 
 # if __name__ == "__main__":
 #     main()
-pip install openpyxl
+!pip install openpyxl
 import pandas as pd
 import streamlit as st
 import io
