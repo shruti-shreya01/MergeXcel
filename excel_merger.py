@@ -46,7 +46,7 @@ def main():
     )
 
     # Display the title
-    st.markdown('<h1 class="stTitle">Excel Files Merger</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="stTitle">MergeXcel</h1>', unsafe_allow_html=True)
     
     # Upload multiple files
     files = st.file_uploader("Upload Excel files", type=["xlsx"], accept_multiple_files=True)
