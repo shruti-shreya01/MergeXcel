@@ -96,21 +96,35 @@ from tempfile import TemporaryDirectory
 
 
 def merge_files_from_zip(zip_file):
-    """Merge all Excel files from the ZIP archive into a single DataFrame."""
+    """Merge all Excel files from the folder within the ZIP archive into a single DataFrame."""
     all_sheets = {}
 
     with TemporaryDirectory() as temp_dir:
         # Extract ZIP file to the temporary directory
         with zipfile.ZipFile(zip_file) as z:
-            z.extractall(temp_dir)
+            # List all files and folders in the ZIP archive
+            zip_file_names = z.namelist()
+            
+            # Find the folder inside the ZIP file (assuming there's one folder, modify if needed)
+            folder_name = None
+            for name in zip_file_names:
+                if name.endswith('/'):  # Identify folder by checking for trailing slash
+                    folder_name = name
+                    break
+            
+            # Extract all files from the folder
+            if folder_name:
+                for file_name in zip_file_names:
+                    if file_name.startswith(folder_name) and file_name.endswith('.xlsx'):
+                        z.extract(file_name, temp_dir)
+            
+            # List all extracted Excel files
+            excel_files = [
+                os.path.join(temp_dir, f) for f in os.listdir(temp_dir) if f.endswith('.xlsx')
+            ]
 
-        # List all extracted Excel files
-        excel_files = [
-            os.path.join(temp_dir, f) for f in os.listdir(temp_dir) if f.endswith('.xlsx')
-        ]
-
-        if not excel_files:
-            raise ValueError("No Excel files found in the ZIP archive.")
+            if not excel_files:
+                raise ValueError(f"No Excel files found in the folder '{folder_name}' inside the ZIP archive.")
 
         # Process each Excel file
         for file in excel_files:
@@ -156,7 +170,7 @@ def main():
     st.markdown('<h1 class="stTitle">MergeXcel</h1>', unsafe_allow_html=True)
 
     # Upload a ZIP file
-    zip_file = st.file_uploader("Upload a ZIP file containing Excel files", type=["zip"])
+    zip_file = st.file_uploader("Upload a ZIP file containing a folder with Excel files", type=["zip"])
 
     if zip_file:
         output_file = st.text_input("Output File Name (including .xlsx extension):", "merged_files.xlsx")
