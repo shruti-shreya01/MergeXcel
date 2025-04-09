@@ -172,6 +172,12 @@ def merge_files(files):
     merged_df.reset_index(drop=True, inplace=True)
     
     return {'Merged_Data': merged_df}
+def add_to_history(action):
+    """Add an action to the history in the session state."""
+    if 'history' not in st.session_state:
+        st.session_state.history = []
+    st.session_state.history.append(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - {action}")
+
 
 def main():
     # Set custom title with green color and add background image
@@ -197,6 +203,13 @@ def main():
 
     # Display the title
     st.markdown('<h1 class="stTitle">MergeXcel & CSV</h1>', unsafe_allow_html=True)
+    # Sidebar for history
+    with st.sidebar:
+        st.header("Work History")
+        if 'history' in st.session_state:
+            for item in st.session_state.history:
+                st.text(item)
+    
     
     # Upload multiple files
     files = st.file_uploader("Upload Excel or CSV files", type=["xlsx", "csv"], accept_multiple_files=True)
