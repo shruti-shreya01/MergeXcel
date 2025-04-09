@@ -128,6 +128,25 @@ def read_file(file):
     
     return sheets
 
+# def merge_files(files):
+#     """Merge all uploaded Excel and CSV files, stacking data for each date."""
+#     all_data = []
+
+#     for file in files:
+#         sheets = read_file(file)
+#         for df in sheets.values():
+#             if 'Date' not in df.columns:
+#                 raise ValueError(f"File {file.name} is missing the 'Date' column.")
+#             all_data.append(df)
+    
+#     # Concatenate all DataFrames
+#     merged_df = pd.concat(all_data, ignore_index=True)
+    
+#     # Sort by Date
+#     merged_df.sort_values('Date', inplace=True)
+    
+#     return {'Merged_Data': merged_df}
+
 def merge_files(files):
     """Merge all uploaded Excel and CSV files, stacking data for each date."""
     all_data = []
@@ -137,6 +156,10 @@ def merge_files(files):
         for df in sheets.values():
             if 'Date' not in df.columns:
                 raise ValueError(f"File {file.name} is missing the 'Date' column.")
+            
+            # Ensure 'Date' is parsed as datetime
+            df['Date'] = pd.to_datetime(df['Date'])
+            
             all_data.append(df)
     
     # Concatenate all DataFrames
@@ -144,6 +167,9 @@ def merge_files(files):
     
     # Sort by Date
     merged_df.sort_values('Date', inplace=True)
+    
+    # Reset index after sorting
+    merged_df.reset_index(drop=True, inplace=True)
     
     return {'Merged_Data': merged_df}
 
