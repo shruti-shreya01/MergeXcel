@@ -172,34 +172,9 @@ def merge_files(files):
     merged_df.reset_index(drop=True, inplace=True)
     
     return {'Merged_Data': merged_df}
-def add_to_history(action):
-    """Add an action to the history in the session state."""
-    if 'history' not in st.session_state:
-        st.session_state.history = []
-    st.session_state.history.append(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - {action}")
 
 
 def main():
-    # Set custom title with green color and add background image
-    # st.markdown(
-    #     """
-    #     <style>
-    #     .stApp {
-    #         background: rgba(255, 255, 255, 0.5) url("https://static.vecteezy.com/system/resources/thumbnails/033/535/363/small/broken-glass-animation-green-screen-free-video.jpg") no-repeat center center;
-    #         background-size: cover;
-    #     }
-    #     .stTitle {
-    #         color: white;
-    #     }
-    #     .css-1p7i8jb {
-    #         background-color: white !important;
-    #         border: 1px solid #d3d3d3; /* Optional: Add a border for better visibility */
-    #         border-radius: 5px; /* Optional: Rounded corners */
-    #     }
-    #     </style>
-    #     """,
-    #     unsafe_allow_html=True
-    # )
 
     # Display the title
     st.markdown('<h1 class="stTitle">MergeXcel & CSV</h1>', unsafe_allow_html=True)
@@ -215,7 +190,6 @@ def main():
     files = st.file_uploader("Upload Excel or CSV files", type=["xlsx", "csv"], accept_multiple_files=True)
 
     if files:
-        add_to_history(f"Uploaded {len(files)} file(s)")
         output_format = st.radio("Select output format:", ("Excel (.xlsx)", "CSV (.csv)"))
         output_extension = ".xlsx" if output_format == "Excel (.xlsx)" else ".csv"
         output_file = st.text_input("Output File Name (including extension):", f"merged_files{output_extension}")
@@ -223,12 +197,12 @@ def main():
         if st.button("Merge Files"):
             if not output_file.endswith(output_extension):
                 st.error(f"Please provide an output file name with {output_extension} extension.")
-                add_to_history("Error: Incorrect output file extension")
+                
             else:
                 try:
                     # Merge files
                     merged_sheets = merge_files(files)
-                    add_to_history(f"Merged {len(files)} file(s) into {output_file}")
+                    
 
                     if output_extension == ".xlsx":
                         # Save the merged data to an Excel file in-memory
