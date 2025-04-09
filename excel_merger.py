@@ -91,15 +91,13 @@ import pandas as pd
 import streamlit as st
 import io
 import os
-from tkinter import filedialog
-import tkinter as tk
 
-def merge_files(file_paths):
-    """Merge all Excel files into a single DataFrame."""
+def merge_files(files):
+    """Merge all uploaded Excel files into a single DataFrame."""
     all_sheets = {}
 
-    for file_path in file_paths:
-        with pd.ExcelFile(file_path) as xl:
+    for file in files:
+        with pd.ExcelFile(file) as xl:
             for sheet_name in xl.sheet_names:
                 if sheet_name not in all_sheets:
                     all_sheets[sheet_name] = []
@@ -113,18 +111,6 @@ def merge_files(file_paths):
         merged_sheets[sheet_name] = merged_df
 
     return merged_sheets
-
-def select_folder():
-    root = tk.Tk()
-    root.withdraw()
-    folder_path = filedialog.askdirectory()
-    return folder_path
-
-def select_files():
-    root = tk.Tk()
-    root.withdraw()
-    file_paths = filedialog.askopenfilenames(filetypes=[("Excel files", "*.xlsx")])
-    return file_paths
 
 def main():
     # Set custom title with green color and add background image
@@ -151,31 +137,14 @@ def main():
     # Display the title
     st.markdown('<h1 class="stTitle">MergeXcel</h1>', unsafe_allow_html=True)
     
-    # Choose between folder or individual files
-    selection_mode = st.radio("Select files from:", ("Folder", "Individual Files"))
+    # Upload multiple files
+    uploaded_files = st.file_uploader("Upload Excel files", type=["xlsx"], accept_multiple_files=True)
 
-    if selection_mode == "Folder":
-        if st.button("Select Folder"):
-            folder_path = select_folder()
-            if folder_path:
-                st.write(f"Selected folder: {folder_path}")
-                excel_files = [os.path.join(folder_path, f) for f in os.listdir(folder_path) if f.endswith('.xlsx')]
-                if not excel_files:
-                    st.error("No Excel files found in the selected folder.")
-                    return
-            else:
-                st.error("No folder selected.")
-                return
-    else:
-        if st.button("Select Files"):
-            excel_files = select_files()
-            if excel_files:
-                st.write(f"Selected files: {', '.join(excel_files)}")
-            else:
-                st.error("No files selected.")
-                return
+    if uploaded_files:
+        st.write("Uploaded files:")
+        for file in uploaded_files:
+            st.write(f"- {file.name}")
 
-    if 'excel_files' in locals() and excel_files:
         output_file = st.text_input("Output File Name (including .xlsx extension):", "merged_files.xlsx")
         if st.button("Merge Files"):
             if not output_file.endswith('.xlsx'):
@@ -183,7 +152,7 @@ def main():
             else:
                 try:
                     # Merge files
-                    merged_sheets = merge_files(excel_files)
+                    merged_sheets = merge_files(uploaded_files)
 
                     # Save the merged data to an Excel file in-memory
                     output_buffer = io.BytesIO()
