@@ -215,6 +215,7 @@ def main():
     files = st.file_uploader("Upload Excel or CSV files", type=["xlsx", "csv"], accept_multiple_files=True)
 
     if files:
+        add_to_history(f"Uploaded {len(files)} file(s)")
         output_format = st.radio("Select output format:", ("Excel (.xlsx)", "CSV (.csv)"))
         output_extension = ".xlsx" if output_format == "Excel (.xlsx)" else ".csv"
         output_file = st.text_input("Output File Name (including extension):", f"merged_files{output_extension}")
