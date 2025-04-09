@@ -223,10 +223,12 @@ def main():
         if st.button("Merge Files"):
             if not output_file.endswith(output_extension):
                 st.error(f"Please provide an output file name with {output_extension} extension.")
+                add_to_history("Error: Incorrect output file extension")
             else:
                 try:
                     # Merge files
                     merged_sheets = merge_files(files)
+                    add_to_history(f"Merged {len(files)} file(s) into {output_file}")
 
                     if output_extension == ".xlsx":
                         # Save the merged data to an Excel file in-memory
