@@ -178,13 +178,7 @@ def main():
 
     # Display the title
     st.markdown('<h1 class="stTitle">MergeXcel & CSV</h1>', unsafe_allow_html=True)
-    # Sidebar for history
-    with st.sidebar:
-        st.header("Work History")
-        if 'history' in st.session_state:
-            for item in st.session_state.history:
-                st.text(item)
-    
+
     
     # Upload multiple files
     files = st.file_uploader("Upload Excel or CSV files", type=["xlsx", "csv"], accept_multiple_files=True)
