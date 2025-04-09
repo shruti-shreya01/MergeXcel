@@ -106,7 +106,6 @@
 
 
 
-
 import pandas as pd
 import streamlit as st
 import io
@@ -117,34 +116,36 @@ def read_file(file):
     file_extension = os.path.splitext(file.name)[1].lower()
     
     if file_extension == '.xlsx':
-        return pd.read_excel(file, sheet_name=None, parse_dates=['Date'])
+        sheets = pd.read_excel(file, sheet_name=None, parse_dates=['Date'])
     elif file_extension == '.csv':
-        return {'Sheet1': pd.read_csv(file, parse_dates=['Date'])}
+        sheets = {'Sheet1': pd.read_csv(file, parse_dates=['Date'])}
     else:
         raise ValueError(f"Unsupported file format: {file_extension}")
+    
+    # Add a column to identify the source file
+    for sheet_name, df in sheets.items():
+        df['Source'] = f"{file.name} - {sheet_name}"
+    
+    return sheets
 
 def merge_files(files):
-    """Merge all uploaded Excel and CSV files based on the Date column."""
-    all_sheets = {}
+    """Merge all uploaded Excel and CSV files, stacking data for each date."""
+    all_data = []
 
     for file in files:
         sheets = read_file(file)
-        for sheet_name, df in sheets.items():
+        for df in sheets.values():
             if 'Date' not in df.columns:
-                raise ValueError(f"File {file.name}, sheet {sheet_name} is missing the 'Date' column.")
-            
-            df.set_index('Date', inplace=True)
-            
-            if sheet_name not in all_sheets:
-                all_sheets[sheet_name] = df
-            else:
-                all_sheets[sheet_name] = all_sheets[sheet_name].join(df, how='outer', rsuffix=f'_{file.name}')
-
-    # Reset index to make 'Date' a column again
-    for sheet_name in all_sheets:
-        all_sheets[sheet_name].reset_index(inplace=True)
-
-    return all_sheets
+                raise ValueError(f"File {file.name} is missing the 'Date' column.")
+            all_data.append(df)
+    
+    # Concatenate all DataFrames
+    merged_df = pd.concat(all_data, ignore_index=True)
+    
+    # Sort by Date
+    merged_df.sort_values('Date', inplace=True)
+    
+    return {'Merged_Data': merged_df}
 
 def main():
     # Set custom title with green color and add background image
@@ -197,7 +198,7 @@ def main():
                     else:
                         # Save the merged data to a CSV file in-memory
                         output_buffer = io.StringIO()
-                        merged_sheets['Sheet1'].to_csv(output_buffer, index=False)
+                        merged_sheets['Merged_Data'].to_csv(output_buffer, index=False)
                         output_buffer = io.BytesIO(output_buffer.getvalue().encode())
                         mime_type = "text/csv"
 
