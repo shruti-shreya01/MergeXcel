@@ -149,25 +149,25 @@ def merge_files(files):
 
 def main():
     # Set custom title with green color and add background image
-    st.markdown(
-        """
-        <style>
-        .stApp {
-            background: rgba(255, 255, 255, 0.5) url("https://static.vecteezy.com/system/resources/thumbnails/033/535/363/small/broken-glass-animation-green-screen-free-video.jpg") no-repeat center center;
-            background-size: cover;
-        }
-        .stTitle {
-            color: white;
-        }
-        .css-1p7i8jb {
-            background-color: white !important;
-            border: 1px solid #d3d3d3; /* Optional: Add a border for better visibility */
-            border-radius: 5px; /* Optional: Rounded corners */
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
+    # st.markdown(
+    #     """
+    #     <style>
+    #     .stApp {
+    #         background: rgba(255, 255, 255, 0.5) url("https://static.vecteezy.com/system/resources/thumbnails/033/535/363/small/broken-glass-animation-green-screen-free-video.jpg") no-repeat center center;
+    #         background-size: cover;
+    #     }
+    #     .stTitle {
+    #         color: white;
+    #     }
+    #     .css-1p7i8jb {
+    #         background-color: white !important;
+    #         border: 1px solid #d3d3d3; /* Optional: Add a border for better visibility */
+    #         border-radius: 5px; /* Optional: Rounded corners */
+    #     }
+    #     </style>
+    #     """,
+    #     unsafe_allow_html=True
+    # )
 
     # Display the title
     st.markdown('<h1 class="stTitle">MergeXcel & CSV</h1>', unsafe_allow_html=True)
