@@ -116,7 +116,7 @@ def read_file(file):
     file_extension = os.path.splitext(file.name)[1].lower()
     
     if file_extension == '.xlsx':
-        sheets = pd.read_excel(file, sheet_name=None, parse_dates=['Date'])
+        sheets = pd.read_excel(file, sheet_name=None, parse_dates=['date'])
     elif file_extension == '.csv':
         sheets = {'Sheet1': pd.read_csv(file, parse_dates=['Date'])}
     else:
